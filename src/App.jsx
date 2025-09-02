@@ -115,7 +115,7 @@ export default function App() {
             </p>
           </div>
           <div className="text-xs text-neutral-500 text-right">
-            v0.3.2 (Monoprix-friendly) · Données RappelConso
+            v0.4.1 (Monoprix-style) · Données RappelConso
           </div>
         </header>
 
@@ -413,12 +413,8 @@ function extractEansFromLine(ln) {
 
 function hasStructuredHeaders(lines) {
   const joined = lines.join("\\n").toLowerCase();
-  return /code\\s*ean/.test(joined) && /(lib[eé]ll?[eé].*produit|libell[eé]\\s*produit|produit)/.test(joined);
-}
-
-function matchAll(text, regex) {
-  const m = text.match(regex);
-  return m ? m : [];
+  // Be tolerant to typos like "Libéllé" split across lines
+  return /code\\s*ean/.test(joined) && /(lib[eé]ll?[eé].*produit|libell[eé]\\s*produit|lib[eé]ll?[eé][^\\n]{0,20}\\n\\s*produit|produit)/.test(joined);
 }
 
 function isValidEAN13(code) {
